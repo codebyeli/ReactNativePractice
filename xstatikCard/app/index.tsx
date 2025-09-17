@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Image } from "react-native";
 
 export default function Index() {
   return (
@@ -16,15 +16,11 @@ export default function Index() {
         </View>
         <View style={styles.cardContent}>
           <View style={styles.cardSegment1}>
-            <Text>I am 23 years old</Text>
-            <Text>I like:</Text>
-            <Text>Building coding projects</Text>
-            <Text>Designing wallpapers</Text>
-            <Text>Editing videos</Text>
-            <Text>Spending time with friends/family</Text>
+            <Image style={styles.imageContainer} source={require('@/assets/images/IMG_0118.jpg')} />
+            <Text>This is me!</Text>
           </View>
           <View style={styles.cardSegment2}>
-            <Text>I am 23 years old</Text>
+            <Text>I'm a software engineer</Text>
             <Text>I like:</Text>
             <Text>Building coding projects</Text>
             <Text>Designing wallpapers</Text>
@@ -44,14 +40,20 @@ const styles = StyleSheet.create({
   },
   titleText: {
     padding: 10,
-    fontWeight: "900",
+    fontWeight: "700"
   },
   cardContainer: {
     backgroundColor: "white",
     padding: 7,
-    height: 500,
+    height: 300,
     borderRadius: 25,
-    width: 800,
+    width: 500,
+  },
+  imageContainer: {
+    padding: 7,
+    height: 150,
+    width: 150,
+    borderRadius: 100,
   },
   cardContent: {
     flex: 1,
