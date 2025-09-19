@@ -1,13 +1,31 @@
+import { useState } from "react";
 import { Button, Text, View } from "react-native";
 
-type CounterProps = {
-  number: number
-}
-
-const Counter = (props: CounterProps) => {
+const Counter = () => {
+  const [count, setCount] = useState(0);
+  
   return(
     <View>
-      <Text>{props.number}</Text>
+      <Text>{count}</Text>
+      <Button title="Up Count" onPress={()=>{
+        setCount(count + 1)
+      }}></Button>
+      <Button title="Down Count" onPress={()=>{
+        setCount(count - 1)
+      }}></Button>
+    </View>
+  )
+}
+
+const DownCounter = () => {
+  const [count, setCount] = useState(0);
+  
+  return(
+    <View>
+      <Text>{count}</Text>
+      <Button title="Up Count" onPress={()=>{
+        setCount(count + 1)
+      }}></Button>
     </View>
   )
 }
@@ -23,7 +41,7 @@ export default function Index() {
     >
       <Text>Counter App</Text>
       <Text>Number</Text>
-      <Counter number={9}/>
+      <Counter/>
     </View>
   );
 }
