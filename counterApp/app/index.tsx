@@ -1,4 +1,16 @@
-import { Text, View } from "react-native";
+import { Button, Text, View } from "react-native";
+
+type CounterProps = {
+  number: number
+}
+
+const Counter = (props: CounterProps) => {
+  return(
+    <View>
+      <Text>{props.number}</Text>
+    </View>
+  )
+}
 
 export default function Index() {
   return (
@@ -9,7 +21,9 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Text>Counter App</Text>
+      <Text>Number</Text>
+      <Counter number={9}/>
     </View>
   );
 }
