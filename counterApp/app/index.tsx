@@ -1,30 +1,19 @@
 import { useState } from "react";
-import { Button, Text, View } from "react-native";
+import { Button, Text, View, StyleSheet } from "react-native";
 
 const Counter = () => {
   const [count, setCount] = useState(0);
   
   return(
     <View>
-      <Text>{count}</Text>
+      <Text style={styles.titleText}>{count}</Text>
       <Button title="Up Count" onPress={()=>{
         setCount(count + 1)
       }}></Button>
       <Button title="Down Count" onPress={()=>{
+        if (count > 0) {
         setCount(count - 1)
-      }}></Button>
-    </View>
-  )
-}
-
-const DownCounter = () => {
-  const [count, setCount] = useState(0);
-  
-  return(
-    <View>
-      <Text>{count}</Text>
-      <Button title="Up Count" onPress={()=>{
-        setCount(count + 1)
+        }
       }}></Button>
     </View>
   )
@@ -40,8 +29,18 @@ export default function Index() {
       }}
     >
       <Text>Counter App</Text>
-      <Text>Number</Text>
       <Counter/>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  titleText:{
+    fontSize: 60
+  },
+  buttonContainer:{
+    flex: 1,
+    flexDirection: "row",
+    alignContent: "space-evenly"
+  }
+})
