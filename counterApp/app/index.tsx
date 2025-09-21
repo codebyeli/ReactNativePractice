@@ -1,23 +1,31 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button, Text, View, StyleSheet } from "react-native";
 
 const Counter = () => {
   const [count, setCount] = useState(0);
-  
-  return(
-    <View>
-      <Text style={styles.titleText}>{count}</Text>
-      <Button title="Up Count" onPress={()=>{
-        setCount(count + 1)
-      }}></Button>
-      <Button title="Down Count" onPress={()=>{
-        if (count > 0) {
-        setCount(count - 1)
-        }
-      }}></Button>
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.count}>{count}</Text>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Down Count"
+          onPress={() => {
+            if (count > 0) {
+              setCount(count - 1);
+            }
+          }}
+        ></Button>
+        <Button
+          title="Up Count"
+          onPress={() => {
+            setCount(count + 1);
+          }}
+        ></Button>
+      </View>
     </View>
-  )
-}
+  );
+};
 
 export default function Index() {
   return (
@@ -26,21 +34,34 @@ export default function Index() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        minHeight: 500,
+        minWidth: 500,
       }}
     >
-      <Text>Counter App</Text>
-      <Counter/>
+      <Text style={styles.title}>Counter App</Text>
+      <Counter />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleText:{
-    fontSize: 60
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
   },
-  buttonContainer:{
-    flex: 1,
+  title: {
+    fontSize: 30,
+  },
+  count: {
+    fontSize: 60,
+  },
+  buttonContainer: {
+    width: 250,
     flexDirection: "row",
-    alignContent: "space-evenly"
-  }
-})
+    justifyContent: "space-between",
+    right: 14,
+  },
+  button: {
+    margin: 13,
+  },
+});

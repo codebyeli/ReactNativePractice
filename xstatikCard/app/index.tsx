@@ -20,7 +20,7 @@ export default function Index() {
             <Text>This is me!</Text>
           </View>
           <View style={styles.cardSegment2}>
-            <Text>I'm a software engineer</Text>
+            <Text>I&apos;m a software engineer</Text>
             <Text>I like:</Text>
             <Text>Building coding projects</Text>
             <Text>Designing wallpapers</Text>
