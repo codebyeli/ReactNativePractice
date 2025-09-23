@@ -20,7 +20,7 @@ const TaskList = () => {
         renderItem={({ item }) => <Text>{item.key}</Text>}
       />
       <Button onPress={() => {
-
+        
       }} title="New task" />
     </View>
   )
