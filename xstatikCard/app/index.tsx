@@ -1,5 +1,19 @@
 import { Text, View, StyleSheet, Image } from "react-native";
 
+type cardUserInfo = {
+  name: string,
+  introduction: string,
+  ocuppation: string,
+  hobbies: string[]
+}
+
+const me: cardUserInfo = {
+  name: 'Eli',
+  introduction: 'Nice to meet you!',
+  ocuppation: 'Software Engineer',
+  hobbies: ['Music', 'Coding', 'Developing']
+}
+
 export default function Index() {
   return (
     <View
@@ -12,20 +26,17 @@ export default function Index() {
     >
       <View style={styles.cardContainer}>
         <View style={styles.titleTextContainer}>
-          <Text style={styles.titleText}>Hello, my name is Eli</Text>
+          <Text style={styles.titleText}>Hello, my name is {me.name}</Text>
         </View>
         <View style={styles.cardContent}>
           <View style={styles.cardSegment1}>
             <Image style={styles.imageContainer} source={require('@/assets/images/IMG_0118.jpg')} />
-            <Text>This is me!</Text>
+            <Text>{me.introduction}</Text>
           </View>
           <View style={styles.cardSegment2}>
-            <Text>I&apos;m a software engineer</Text>
-            <Text>I like:</Text>
-            <Text>Building coding projects</Text>
-            <Text>Designing wallpapers</Text>
-            <Text>Editing videos</Text>
-            <Text>Spending time with friends/family</Text>
+            <Text>I&apos;m a {me.ocuppation}</Text>
+            <Text>I my hobbies are:</Text>
+            <Text>{me.hobbies.join(', ')}</Text>
           </View>
         </View>
 
