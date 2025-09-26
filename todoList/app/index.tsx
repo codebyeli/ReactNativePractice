@@ -2,17 +2,9 @@ import React, { useState } from "react";
 import { Text, StyleSheet, FlatList, View, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-type Tasks = {
-  name: string;
-  description: string;
-  completed: boolean;
-  reward?: string;
-};
-
 const TaskList = () => {
-  const [task, setTask] = useState([])
   return (
-    <View>
+    <SafeAreaView>
       <FlatList
         data={[
           { key: 'Data' },
@@ -22,7 +14,7 @@ const TaskList = () => {
       <Button onPress={() => {
         
       }} title="New task" />
-    </View>
+    </SafeAreaView>
   )
 }
 
