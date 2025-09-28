@@ -1,27 +1,27 @@
-import React, { useState } from "react";
-import { Text, StyleSheet, FlatList, View, Button } from "react-native";
+import { router } from "expo-router";
+import React from "react";
+import { Text, StyleSheet, FlatList, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const TaskList = () => {
   return (
     <SafeAreaView>
       <FlatList
-        data={[
-          { key: 'Data' },
-        ]}
+        data={[{ key: "Data" }]}
         renderItem={({ item }) => <Text>{item.key}</Text>}
       />
-      <Button onPress={() => {
-        
-      }} title="New task" />
+      <Button
+        title="New task"
+        onPress={() => router.push("/createTask")}
+      />
     </SafeAreaView>
-  )
-}
+  );
+};
 
 function Index() {
   return (
     <SafeAreaView style={styles.body}>
-      <Text style={styles.titleText} >To do app</Text>
+      <Text style={styles.titleText}>To do app</Text>
       <TaskList />
     </SafeAreaView>
   );
@@ -30,13 +30,12 @@ function Index() {
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    left: 15,
-    top: 15
+    margin: 12,
   },
   titleText: {
     fontSize: 50,
-    fontWeight: 500
-  }
+    fontWeight: 500,
+  },
 });
 
 export default Index;
