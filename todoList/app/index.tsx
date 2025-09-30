@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import TextBox from "@/components/textBox";
 
 type Tasks = {
-  id?: number;
+  id: number;
   name: string;
   description: string;
   completed: boolean;
@@ -32,6 +32,11 @@ function Index() {
     setCount(count + 1)
   }
 
+    function deleteTask(id: number) {
+      tasks.splice(id);
+      setTasks([...tasks])
+  }
+
   return (
     <SafeAreaView style={styles.body}>
       <Text style={styles.titleText}>To do app</Text>
@@ -41,7 +46,7 @@ function Index() {
       <Button title='Save task' onPress={createTask} />
       <FlatList
         data={tasks}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
+        renderItem={({ item }) => <Text>{item.name} <Button title="Delete task" onPress={() => deleteTask(item.id)}/></Text>}
       />
     </SafeAreaView>
   );
