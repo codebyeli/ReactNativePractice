@@ -32,9 +32,8 @@ function Index() {
     setCount(count + 1)
   }
 
-    function deleteTask(id: number) {
-      tasks.splice(id);
-      setTasks([...tasks])
+  function deleteTask(id: number) {
+    setTasks(tasks.filter(task => task.id !== id));
   }
 
   return (
@@ -46,7 +45,7 @@ function Index() {
       <Button title='Save task' onPress={createTask} />
       <FlatList
         data={tasks}
-        renderItem={({ item }) => <Text>{item.name} <Button title="Delete task" onPress={() => deleteTask(item.id)}/></Text>}
+        renderItem={({ item }) => <Text>{item.name} <Button title="Delete task" onPress={() => deleteTask(item.id)} /></Text>}
       />
     </SafeAreaView>
   );
