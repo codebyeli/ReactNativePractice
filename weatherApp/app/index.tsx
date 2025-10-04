@@ -3,7 +3,16 @@ import { Text, View, StyleSheet } from "react-native";
 
 export default function Index() {
   const [x, setX] = useState()
-  useEffect( () => {}, [])
+  useEffect( () => {
+    const fetchData = async () => {
+      try{
+        const response = await fetch('')
+      }
+      catch{
+
+      }
+    }
+  }, [])
   return (
     <View
       style={{
