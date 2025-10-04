@@ -1,6 +1,9 @@
-import { Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Text, View, StyleSheet } from "react-native";
 
 export default function Index() {
+  const [x, setX] = useState()
+  useEffect( () => {}, [])
   return (
     <View
       style={{
@@ -13,3 +16,7 @@ export default function Index() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+
+})
