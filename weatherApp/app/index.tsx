@@ -28,10 +28,10 @@ export default function Index() {
         <Text style={styles.headerText}>Weather App</Text>
       </View>
       <View style={styles.body}>
-        <Text>Current Temp</Text>
+        <Text style={styles.coloredText}>Current Temp</Text>
         <Text style={styles.mainTemp}>{data ? data.daily.temperature_2m_max[0] : "Loading..."} °C</Text>
-        <Text>Min Temp {data ? data.daily.temperature_2m_min[0] : "Loading..."} °C</Text>
-        <Text>Today is {data ? data.daily.time[0] : "Loading..."}</Text>
+        <Text style={styles.coloredText}>Min Temp {data ? data.daily.temperature_2m_min[0] : "Loading..."} °C</Text>
+        <Text style={styles.coloredText}>Today is {data ? data.daily.time[0] : "Loading..."}</Text>
       </View>
     </SafeAreaView>
   );
@@ -65,4 +65,7 @@ const styles = StyleSheet.create({
     color: 'white',
     zIndex: 2
   },
+  coloredText: {
+    color: 'white'
+  }
 })
