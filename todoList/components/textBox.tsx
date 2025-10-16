@@ -10,20 +10,30 @@ type TextBoxProps = {
 
 const TextBox = (props: TextBoxProps) => {
   return (
-    <View>
-      <Text>{props.label}</Text>
-      <TextInput placeholder={props.placeholder} onChangeText={props.onChange} value={props.value}/>
+    <View style={styles.textBoxContainer}>
+      <Text style={styles.labelText}>{props.label}</Text>
+      <TextInput style={styles.input} placeholder={props.placeholder} onChangeText={props.onChange} value={props.value} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-    labelText: {
-
-    },
-    input:{
-
-    }
+  textBoxContainer: {
+    paddingVertical: 4,
+    marginBottom: 8
+  },
+  labelText: {
+    fontWeight: 700,
+    fontSize: 20,
+    paddingVertical: 4,
+    padding: 10,
+  },
+  input: {
+    height: 35,
+    padding: 10,
+    backgroundColor: '#EBEBEB',
+    borderRadius: 25
+  },
 })
 
 export default TextBox;

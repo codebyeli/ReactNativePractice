@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 36,
-    fontWeight: "600",
+    fontWeight: "700",
     marginBottom: 12,
   },
   taskItem: {
