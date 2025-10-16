@@ -77,8 +77,18 @@ function Index() {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <View style={styles.taskItem}>
-                <Text style={styles.taskText}>{item.name}</Text>
-                <Button title="Delete" onPress={() => deleteTask(item.id)} />
+                <View>
+                  <Text style={styles.taskText}>Title: {item.name}</Text>
+                  <Text style={styles.taskText}>Description: {item.description}</Text>
+                  {item.reward ? (
+                    <Text style={styles.taskText}>Reward for completion: {item.reward}</Text>
+                  ) : (
+                    <></>
+                  )}
+                </View>
+                <View style={styles.buttonContainer}>
+                  <Button title="Delete" onPress={() => deleteTask(item.id)} />
+                </View>
               </View>
             )}
           />
@@ -102,12 +112,14 @@ const styles = StyleSheet.create({
   taskItem: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    paddingVertical: 8
   },
   taskText: {
     fontSize: 18,
+  },
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center"
   },
 });
 
