@@ -78,10 +78,10 @@ function Index() {
             renderItem={({ item }) => (
               <View style={styles.taskItem}>
                 <View>
-                  <Text style={styles.taskText}>Title: {item.name}</Text>
-                  <Text style={styles.taskText}>Description: {item.description}</Text>
+                  <Text style={styles.taskTitle}>{item.name}</Text>
+                  <Text style={styles.taskText}>{item.description}</Text>
                   {item.reward ? (
-                    <Text style={styles.taskText}>Reward for completion: {item.reward}</Text>
+                    <Text style={styles.taskTextBold}>Reward for completion: {item.reward}</Text>
                   ) : (
                     <></>
                   )}
@@ -112,10 +112,22 @@ const styles = StyleSheet.create({
   taskItem: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 8
+    paddingVertical: 8,
+    backgroundColor: '#EBEBEB',
+    borderRadius: 25,
+    padding: 15,
+    margin: 12
+  },
+  taskTitle: {
+    fontSize: 20,
+    marginBottom: 8,
+    fontWeight: 500
   },
   taskText: {
-    fontSize: 18,
+    fontSize: 16,
+  },
+  taskTextBold: {
+    fontSize: 16,
   },
   buttonContainer: {
     justifyContent: "center",
