@@ -1,8 +1,8 @@
-import { router } from "expo-router";
 import React, { useState } from "react";
 import { Text, StyleSheet, FlatList, Button, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TextBox from "@/components/textBox";
+import { Checkbox } from 'expo-checkbox';
 
 type Task = {
   id: number;
@@ -43,6 +43,12 @@ function Index() {
     setTasks(tasks.filter((task) => task.id !== id));
   }
 
+  function toggleCompleteOnTask(id: number) {
+    setTasks(tasks.map((task) => 
+      task.id === id ? { ...task, completed: !task.completed } : task
+    ));
+  }
+
   return (
     <SafeAreaView style={styles.body}>
       {showForm ? (
@@ -77,7 +83,11 @@ function Index() {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <View style={styles.taskItem}>
-                <View>
+                <View style={styles.row}>
+                  <View style={styles.checkboxContainer}>
+                  <Checkbox  value={item.completed} onChange={() => toggleCompleteOnTask(item.id)} />
+                  </View>
+                  <View>
                   <Text style={styles.taskTitle}>{item.name}</Text>
                   <Text style={styles.taskText}>{item.description}</Text>
                   {item.reward ? (
@@ -85,6 +95,7 @@ function Index() {
                   ) : (
                     <></>
                   )}
+                  </View>
                 </View>
                 <View style={styles.buttonContainer}>
                   <Button title="Delete" onPress={() => deleteTask(item.id)} />
@@ -103,6 +114,10 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     margin: 12,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   titleText: {
     fontSize: 36,
@@ -131,6 +146,12 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     justifyContent: "center",
+    alignItems: "center"
+  },
+    checkboxContainer: {
+    width: 75,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
     alignItems: "center"
   },
 });
