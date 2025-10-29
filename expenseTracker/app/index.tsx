@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import TextBox from "@/components/textBox";
+import RNPickerSelect from "react-native-picker-select"
+
 
 export default function Index() {
   type Entry = {
@@ -28,6 +30,7 @@ export default function Index() {
     <View style={styles.body}>
       <TextBox label="Name" placeholder="Name" />
       <TextBox label="Amount" placeholder="Amount" />
+      <RNPickerSelect onValueChange={()=>{}} items={[]} />
     </View>
   );
 }
