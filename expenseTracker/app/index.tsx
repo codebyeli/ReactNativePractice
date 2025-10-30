@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Button } from "react-native";
 import TextBox from "@/components/textBox";
 import RNPickerSelect from "react-native-picker-select"
 
@@ -28,9 +28,14 @@ export default function Index() {
 
   return (
     <View style={styles.body}>
+      <Text>Monthly budget: {budget?.amount ? budget.amount : "No budget set" }</Text>
       <TextBox label="Name" placeholder="Name" />
       <TextBox label="Amount" placeholder="Amount" />
-      <RNPickerSelect onValueChange={()=>{}} items={[]} />
+      <RNPickerSelect onValueChange={(value)=> console.log(value)} items={[
+        {label: 'Expense', value: 'expense' },
+        {label: 'Income', value: 'income' },
+      ]} />
+      <Button title="Save" onPress={ () => {} } />
     </View>
   );
 }
