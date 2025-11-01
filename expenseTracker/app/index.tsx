@@ -28,14 +28,24 @@ export default function Index() {
 
   return (
     <View style={styles.body}>
-      <Text>Monthly budget: {budget?.amount ? budget.amount : "No budget set" }</Text>
-      <TextBox label="Name" placeholder="Name" />
-      <TextBox label="Amount" placeholder="Amount" />
-      <RNPickerSelect onValueChange={(value)=> console.log(value)} items={[
-        {label: 'Expense', value: 'expense' },
-        {label: 'Income', value: 'income' },
-      ]} />
-      <Button title="Save" onPress={ () => {} } />
+      {budget === undefined ?
+        <View>
+          <TextBox label="What's your current monthly budget" placeholder="Budget" />
+          <Button title="Save budget"
+            onPress={() => {  }} />
+        </View>
+        :
+        <View>
+          <Text>Monthly budget: {budget?.amount ? budget.amount : "No budget set"}</Text>
+          <TextBox label="Name" placeholder="Name" />
+          <TextBox label="Amount" placeholder="Amount" />
+          <RNPickerSelect onValueChange={(value) => console.log(value)} items={[
+            { label: 'Expense', value: 'expense' },
+            { label: 'Income', value: 'income' },
+          ]} />
+          <Button title="Save" onPress={() => { console.log(budget?.amount) }} />
+        </View>}
+
     </View>
   );
 }
