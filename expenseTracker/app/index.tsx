@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Text, View, StyleSheet, Button } from "react-native";
 import TextBox from "@/components/textBox";
-import RNPickerSelect from "react-native-picker-select"
-
+import RNPickerSelect from "react-native-picker-select";
 
 export default function Index() {
   type Entry = {
@@ -28,24 +27,41 @@ export default function Index() {
 
   return (
     <View style={styles.body}>
-      {budget === undefined ?
+      {budget === undefined ? (
         <View>
-          <TextBox label="What's your current monthly budget" placeholder="Budget" />
-          <Button title="Save budget"
-            onPress={() => {  }} />
+          <TextBox
+            label="What's your current monthly budget?"
+            placeholder="Budget"
+            onChange={(text) => setBudget({ amount: parseInt(text) })}
+          />
+          <Button
+            title="Save budget"
+            onPress={() => {
+            }}
+          />
         </View>
-        :
+      ) : (
         <View>
-          <Text>Monthly budget: {budget?.amount ? budget.amount : "No budget set"}</Text>
+          <Text>
+            Monthly budget: {budget?.amount ? budget.amount : "No budget set"}
+          </Text>
           <TextBox label="Name" placeholder="Name" />
           <TextBox label="Amount" placeholder="Amount" />
-          <RNPickerSelect onValueChange={(value) => console.log(value)} items={[
-            { label: 'Expense', value: 'expense' },
-            { label: 'Income', value: 'income' },
-          ]} />
-          <Button title="Save" onPress={() => { console.log(budget?.amount) }} />
-        </View>}
-
+          <RNPickerSelect
+            onValueChange={(value) => (value)}
+            items={[
+              { label: "Expense", value: "expense" },
+              { label: "Income", value: "income" },
+            ]}
+          />
+          <TextBox label="Description" placeholder="description" />
+          <Button
+            title="Save"
+            onPress={() => {
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 }
