@@ -6,13 +6,30 @@ type TextBoxProps = {
   placeholder: string;
   onChange?: (text: string) => void;
   value?: string;
+  keyboardType?: 'default' | 'numeric' | 'email-address' | 'phone-pad';
 };
 
 const TextBox = (props: TextBoxProps) => {
+  
+  const handleTextChange = (text: string) => {
+    if (props.keyboardType === 'numeric') {
+      const cleanText = text.replace(/[^0-9]/g, '');
+      props.onChange?.(cleanText);
+    } else {
+      props.onChange?.(text);
+    }
+  };
+
   return (
     <View style={styles.textBoxContainer}>
       <Text style={styles.labelText}>{props.label}</Text>
-      <TextInput style={styles.input} placeholder={props.placeholder} onChangeText={props.onChange} value={props.value} />
+      <TextInput 
+        style={styles.input} 
+        placeholder={props.placeholder} 
+        onChangeText={handleTextChange} 
+        value={props.value}
+        keyboardType={props.keyboardType || 'default'}
+      />
     </View>
   );
 };

@@ -12,54 +12,92 @@ export default function Index() {
   };
 
   type Budget = {
-    amount?: number;
-    isOverBudget?: boolean;
+    amount: number;
+    isOverBudget: boolean;
   };
 
-  const [entries, setEntries] = useState<Entry>({
+  const [entries, setEntries] = useState<Entry[]>([]);
+  const [budgetInput, setBudgetInput] = useState("");
+
+  const [entriesForm, setEntriesForm] = useState<Entry>({
     type: "",
     amount: 0,
     name: "",
     description: "",
   });
 
-  const [budget, setBudget] = useState<Budget>();
+  const [budget, setBudget] = useState<Budget>({
+    amount: 0,
+    isOverBudget: false
+  });
+
+  function createEntry() {
+    setEntries([
+      ...entries,
+      {
+        type: entriesForm.type,
+        amount: entriesForm.amount,
+        name: entriesForm.name,
+        description: entriesForm.description,
+      },
+    ]);
+    setEntriesForm({ type: "", amount: 0, name: "", description: "" });
+  }
 
   return (
     <View style={styles.body}>
-      {budget === undefined ? (
+      {budget.amount === 0 ? (
         <View>
           <TextBox
             label="What's your current monthly budget?"
             placeholder="Budget"
-            onChange={(text) => setBudget({ amount: parseInt(text) })}
+            value={budgetInput}
+            onChange={setBudgetInput}
+            keyboardType="numeric"
           />
-          <Button
-            title="Save budget"
-            onPress={() => {
-            }}
-          />
+          <Button title="Save budget" onPress={() => setBudget({ amount: parseInt(budgetInput), isOverBudget: false })} />
         </View>
       ) : (
         <View>
-          <Text>
-            Monthly budget: {budget?.amount ? budget.amount : "No budget set"}
-          </Text>
-          <TextBox label="Name" placeholder="Name" />
-          <TextBox label="Amount" placeholder="Amount" />
+          <Text> Monthly budget: {budget.amount ? budget.amount : "No budget set"} </Text>
+          <TextBox
+            label="Name"
+            placeholder="Name"
+            value={entriesForm.name}
+            onChange={(text) => setEntriesForm({ ...entriesForm, name: text })}
+          />
+          <TextBox
+            label="Amount"
+            placeholder="Amount"
+            value={
+              entriesForm.amount === 0 ? "" : entriesForm.amount.toString()
+            }
+            onChange={(text) => {
+              const numValue = text === "" ? 0 : parseInt(text);
+              setEntriesForm({ ...entriesForm, amount: numValue });
+            }}
+            keyboardType="numeric"
+          />
+          <Text>Type of entry</Text>
           <RNPickerSelect
-            onValueChange={(value) => (value)}
+            onValueChange={(text) =>
+              setEntriesForm({ ...entriesForm, type: text })
+            }
             items={[
               { label: "Expense", value: "expense" },
               { label: "Income", value: "income" },
             ]}
+            value={entriesForm.type}
           />
-          <TextBox label="Description" placeholder="description" />
-          <Button
-            title="Save"
-            onPress={() => {
-            }}
+          <TextBox
+            label="Description"
+            placeholder="Description"
+            value={entriesForm.description}
+            onChange={(text) =>
+              setEntriesForm({ ...entriesForm, description: text })
+            }
           />
+          <Button title="Save" onPress={createEntry} />
         </View>
       )}
     </View>
