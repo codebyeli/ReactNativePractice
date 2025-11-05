@@ -31,8 +31,8 @@ export default function Index() {
     isOverBudget: false
   });
 
-  function createEntry() {
-    setEntries([
+function createEntry() {
+    const newEntries = [
       ...entries,
       {
         type: entriesForm.type,
@@ -40,8 +40,22 @@ export default function Index() {
         name: entriesForm.name,
         description: entriesForm.description,
       },
-    ]);
+    ];
+    setEntries(newEntries);
+    budgetCheck(newEntries);
     setEntriesForm({ type: "", amount: 0, name: "", description: "" });
+  }
+
+  function budgetCheck(currentEntries: Entry[]) {
+    const expenses = currentEntries
+      .filter((entry) => entry.type === "expense")
+      .reduce((sum, entry) => sum + entry.amount, 0);
+
+    if (expenses > budget.amount && budget.isOverBudget === false) {
+      setBudget({ ...budget, isOverBudget: true });
+    } else if (expenses <= budget.amount && budget.isOverBudget === true) {
+      setBudget({ ...budget, isOverBudget: false });
+    }
   }
 
   return (
@@ -59,7 +73,13 @@ export default function Index() {
         </View>
       ) : (
         <View>
-          <Text> Monthly budget: {budget.amount ? budget.amount : "No budget set"} </Text>
+          {
+            budget.isOverBudget === true ? (
+              <Text> Monthly budget: {budget.amount ? budget.amount : "No budget set"}, you're over budget </Text>
+            ) : (
+              <Text> Monthly budget: {budget.amount ? budget.amount : "No budget set"} </Text>
+            )
+          }
           <TextBox
             label="Name"
             placeholder="Name"
