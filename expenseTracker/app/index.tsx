@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, FlatList } from "react-native";
 import TextBox from "@/components/textBox";
-import RNPickerSelect from "react-native-picker-select";
+import SelectDropdown from "react-native-select-dropdown";
 
 export default function Index() {
   type Entry = {
+    id: number;
     type: string;
     amount: number;
     name: string;
@@ -18,8 +19,9 @@ export default function Index() {
 
   const [entries, setEntries] = useState<Entry[]>([]);
   const [budgetInput, setBudgetInput] = useState("");
-
+  const [count, setCount] = useState(0);
   const [entriesForm, setEntriesForm] = useState<Entry>({
+    id: count,
     type: "",
     amount: 0,
     name: "",
@@ -28,13 +30,14 @@ export default function Index() {
 
   const [budget, setBudget] = useState<Budget>({
     amount: 0,
-    isOverBudget: false
+    isOverBudget: false,
   });
 
-function createEntry() {
+  function createEntry() {
     const newEntries = [
       ...entries,
       {
+        id: count,
         type: entriesForm.type,
         amount: entriesForm.amount,
         name: entriesForm.name,
@@ -43,7 +46,14 @@ function createEntry() {
     ];
     setEntries(newEntries);
     budgetCheck(newEntries);
-    setEntriesForm({ type: "", amount: 0, name: "", description: "" });
+    setEntriesForm({
+      id: count,
+      type: "",
+      amount: 0,
+      name: "",
+      description: "",
+    });
+    setCount(count + 1);
   }
 
   function budgetCheck(currentEntries: Entry[]) {
@@ -69,17 +79,29 @@ function createEntry() {
             onChange={setBudgetInput}
             keyboardType="numeric"
           />
-          <Button title="Save budget" onPress={() => setBudget({ amount: parseInt(budgetInput), isOverBudget: false })} />
+          <Button
+            title="Save budget"
+            onPress={() =>
+              setBudget({ amount: parseInt(budgetInput), isOverBudget: false })
+            }
+          />
         </View>
       ) : (
         <View>
-          {
-            budget.isOverBudget === true ? (
-              <Text> Monthly budget: {budget.amount ? budget.amount : "No budget set"}, you're over budget </Text>
-            ) : (
-              <Text> Monthly budget: {budget.amount ? budget.amount : "No budget set"} </Text>
-            )
-          }
+          {budget.isOverBudget === true ? (
+            <Text>
+              {" "}
+              Monthly budget: {budget.amount ? budget.amount : "No budget set"},
+              over budget{" "}
+            </Text>
+          ) : (
+            <Text>
+              {" "}
+              Monthly budget: {budget.amount
+                ? budget.amount
+                : "No budget set"}{" "}
+            </Text>
+          )}
           <TextBox
             label="Name"
             placeholder="Name"
@@ -98,16 +120,22 @@ function createEntry() {
             }}
             keyboardType="numeric"
           />
-          <Text>Type of entry</Text>
-          <RNPickerSelect
-            onValueChange={(text) =>
-              setEntriesForm({ ...entriesForm, type: text })
-            }
-            items={[
-              { label: "Expense", value: "expense" },
-              { label: "Income", value: "income" },
+          <SelectDropdown
+            data={[
+              { title: "Expense", value: "expense" },
+              { title: "Income", value: "income" },
             ]}
-            value={entriesForm.type}
+            onSelect={(text) => setEntriesForm({ ...entriesForm, type: text })}
+            renderButton={(selectedItem, isOpened) => {
+              return <Text>Type of entry</Text>;
+            }}
+            renderItem={(item, index, isSelected) => {
+              return (
+                <View>
+                  <Text>{item.title}</Text>
+                </View>
+              );
+            }}
           />
           <TextBox
             label="Description"
@@ -118,6 +146,15 @@ function createEntry() {
             }
           />
           <Button title="Save" onPress={createEntry} />
+          <FlatList
+            data={entries}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View>
+                <Text>{item.name}</Text>
+              </View>
+            )}
+          />
         </View>
       )}
     </View>
