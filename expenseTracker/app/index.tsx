@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, View, StyleSheet, Button, FlatList } from "react-native";
+import { Text, View, StyleSheet, Button, FlatList, TextInput } from "react-native";
 import TextBox from "@/components/textBox";
 import SelectDropdown from "react-native-select-dropdown";
 
@@ -127,7 +127,13 @@ export default function Index() {
             ]}
             onSelect={(text) => setEntriesForm({ ...entriesForm, type: text })}
             renderButton={(selectedItem, isOpened) => {
-              return <Text>Type of entry</Text>;
+              return (
+                <View style={styles.textBoxContainer}>
+                  <Text style={styles.labelText}>Type of entry</Text>
+                  <TextInput style={styles.input} value={selectedItem.title} editable={false} />
+                </View>
+              )
+
             }}
             renderItem={(item, index, isSelected) => {
               return (
@@ -166,5 +172,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  textBoxContainer: {
+    paddingVertical: 4,
+    marginBottom: 8
+  },
+  labelText: {
+    fontWeight: 700,
+    fontSize: 20,
+    paddingVertical: 4,
+    padding: 10,
+  },
+  input: {
+    height: 35,
+    padding: 10,
+    backgroundColor: '#EBEBEB',
+    borderRadius: 25,
+    borderWidth: 1
   },
 });
