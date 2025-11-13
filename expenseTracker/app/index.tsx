@@ -130,15 +130,18 @@ export default function Index() {
               return (
                 <View style={styles.textBoxContainer}>
                   <Text style={styles.labelText}>Type of entry</Text>
-                  <TextInput style={styles.input} value={selectedItem.title} editable={false} />
+                  <TextInput 
+                    style={styles.input} 
+                    value={selectedItem?.title || "Select type"} 
+                    editable={false} 
+                  />
                 </View>
               )
-
             }}
             renderItem={(item, index, isSelected) => {
               return (
                 <View>
-                  <Text>{item.title}</Text>
+                  <Text style={styles.selectText}>{item.title}</Text>
                 </View>
               );
             }}
@@ -182,6 +185,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingVertical: 4,
     padding: 10,
+  },
+    selectText: {
+    fontSize: 15,
+    padding: 10,
+    fontWeight: 500
   },
   input: {
     height: 35,
