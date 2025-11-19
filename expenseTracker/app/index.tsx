@@ -263,12 +263,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 
-  dropdownItem: {
-    padding: 10,
-  },
-
   selectText: {
     fontSize: 16,
     fontWeight: "500",
+    padding: 10
   },
 });
