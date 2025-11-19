@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Text, View, StyleSheet, Button, FlatList, TextInput } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  FlatList,
+  TextInput,
+  ScrollView,
+} from "react-native";
 import TextBox from "@/components/textBox";
 import SelectDropdown from "react-native-select-dropdown";
 
@@ -61,19 +69,18 @@ export default function Index() {
       .filter((entry) => entry.type === "expense")
       .reduce((sum, entry) => sum + entry.amount, 0);
 
-    if (expenses > budget.amount && budget.isOverBudget === false) {
-      setBudget({ ...budget, isOverBudget: true });
-    } else if (expenses <= budget.amount && budget.isOverBudget === true) {
-      setBudget({ ...budget, isOverBudget: false });
-    }
+    setBudget({
+      ...budget,
+      isOverBudget: expenses > budget.amount,
+    });
   }
 
   return (
-    <View style={styles.body}>
+    <View style={styles.screen}>
       {budget.amount === 0 ? (
-        <View>
+        <View style={styles.centerContainer}>
           <TextBox
-            label="What's your current monthly budget?"
+            label="What's your monthly budget?"
             placeholder="Budget"
             value={budgetInput}
             onChange={setBudgetInput}
@@ -87,48 +94,41 @@ export default function Index() {
           />
         </View>
       ) : (
-        <View>
-          {budget.isOverBudget === true ? (
-            <Text>
-              {" "}
-              Monthly budget: {budget.amount ? budget.amount : "No budget set"},
-              over budget{" "}
+        <View style={styles.container}>
+          <View style={styles.formContainer}>
+            <Text style={styles.budgetText}>
+              Monthly budget: {budget.amount}{" "}
+              {budget.isOverBudget && (
+                <Text style={styles.overBudget}>— OVER BUDGET!</Text>
+              )}
             </Text>
-          ) : (
-            <Text>
-              {" "}
-              Monthly budget: {budget.amount
-                ? budget.amount
-                : "No budget set"}{" "}
-            </Text>
-          )}
-          <TextBox
-            label="Name"
-            placeholder="Name"
-            value={entriesForm.name}
-            onChange={(text) => setEntriesForm({ ...entriesForm, name: text })}
-          />
-          <TextBox
-            label="Amount"
-            placeholder="Amount"
-            value={
-              entriesForm.amount === 0 ? "" : entriesForm.amount.toString()
-            }
-            onChange={(text) => {
-              const numValue = text === "" ? 0 : parseInt(text);
-              setEntriesForm({ ...entriesForm, amount: numValue });
-            }}
-            keyboardType="numeric"
-          />
-          <SelectDropdown
-            data={[
-              { title: "Expense", value: "expense" },
-              { title: "Income", value: "income" },
-            ]}
-            onSelect={(text) => setEntriesForm({ ...entriesForm, type: text })}
-            renderButton={(selectedItem, isOpened) => {
-              return (
-                <View style={styles.textBoxContainer}>
+
+            <TextBox
+              label="Name"
+              placeholder="Name"
+              value={entriesForm.name}
+              onChange={(text) => setEntriesForm({ ...entriesForm, name: text })}
+            />
+
+            <TextBox
+              label="Amount"
+              placeholder="Amount"
+              value={entriesForm.amount === 0 ? "" : entriesForm.amount.toString()}
+              onChange={(text) => {
+                const numValue = text === "" ? 0 : parseInt(text);
+                setEntriesForm({ ...entriesForm, amount: numValue });
+              }}
+              keyboardType="numeric"
+            />
+
+            <SelectDropdown
+              data={[
+                { title: "Expense", value: "expense" },
+                { title: "Income", value: "income" },
+              ]}
+              onSelect={(text) => setEntriesForm({ ...entriesForm, type: text })}
+              renderButton={(selectedItem, isOpened) => {
+                return (<View style={styles.textBoxContainer}>
                   <Text style={styles.labelText}>Type of entry</Text>
                   <TextInput
                     style={styles.input}
@@ -136,27 +136,32 @@ export default function Index() {
                     editable={false}
                   />
                 </View>
-              )
-            }}
-            renderItem={(item, index, isSelected) => {
-              return (
-                <View>
-                  <Text style={styles.selectText}>{item.title}</Text>
-                </View>
-              );
-            }}
-          />
-          <TextBox
-            label="Description"
-            placeholder="Description"
-            value={entriesForm.description}
-            onChange={(text) =>
-              setEntriesForm({ ...entriesForm, description: text })
-            }
-          />
-          <Button title="Save" onPress={createEntry} />
+                )
+              }}
+              renderItem={(item, index, isSelected) => {
+                return (
+                  <View>
+                    <Text style={styles.selectText}>{item.title}</Text>
+                  </View>);
+              }}
+            />
+
+            <TextBox
+              label="Description"
+              placeholder="Description"
+              value={entriesForm.description}
+              onChange={(text) =>
+                setEntriesForm({ ...entriesForm, description: text })
+              }
+            />
+
+            <Button title="Save Entry" onPress={createEntry} />
+          </View>
+
           <FlatList
             data={entries}
+            style={styles.list}
+            contentContainerStyle={{ paddingBottom: 140 }}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <View style={styles.entryContainer}>
@@ -164,7 +169,7 @@ export default function Index() {
                   <Text style={styles.entryHeadersText}>{item.name}</Text>
                   <Text style={styles.entryHeadersText}>{item.amount}</Text>
                 </View>
-                {item.description ? <Text>{item.description}</Text> : <></>}
+                {item.description ? <Text>{item.description}</Text> : null}
               </View>
             )}
           />
@@ -175,47 +180,95 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  body: {
+  screen: {
+    flex: 1,
+    paddingTop: 40,
+    backgroundColor: "#F4F4F4",
+  },
+
+  centerContainer: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    paddingHorizontal: 40,
   },
+
+  container: {
+    flex: 1,
+    paddingHorizontal: 30,
+  },
+
+  formContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+    paddingVertical: 10,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  },
+
+  budgetText: {
+    fontSize: 20,
+    fontWeight: "600",
+    marginBottom: 10,
+  },
+
+  overBudget: {
+    color: "red",
+    fontWeight: "700",
+  },
+
+  list: {
+    flex: 1,
+    marginTop: 10,
+  },
+
+  entryContainer: {
+    width: "100%",
+    padding: 15,
+    marginVertical: 6,
+    backgroundColor: "#EBEBEB",
+    borderRadius: 15,
+  },
+
+  entryHeaders: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 5,
+  },
+
+  entryHeadersText: {
+    fontWeight: "700",
+    fontSize: 17,
+  },
+
   textBoxContainer: {
     paddingVertical: 4,
-    marginBottom: 8
+    width: "100%",
   },
+
   labelText: {
-    fontWeight: 700,
-    fontSize: 20,
-    paddingVertical: 4,
-    padding: 10,
+    fontWeight: "700",
+    fontSize: 16,
+    paddingBottom: 4,
   },
-  selectText: {
-    fontSize: 15,
-    padding: 10,
-    fontWeight: 500
-  },
+
   input: {
     height: 35,
     padding: 10,
     backgroundColor: '#EBEBEB',
     borderRadius: 25,
-    borderWidth: 1
+    borderWidth: 1,
   },
-  entryContainer: {
-    width: 300,
-    padding: 15,
-    margin: 10,
-    backgroundColor: '#EBEBEB',
-    borderRadius: 25,
+
+  dropdownItem: {
+    padding: 10,
   },
-  entryHeaders: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 5,
-  },
-  entryHeadersText: {
-    fontWeight: 700,
-    fontSize: 17,
+
+  selectText: {
+    fontSize: 16,
+    fontWeight: "500",
   },
 });
