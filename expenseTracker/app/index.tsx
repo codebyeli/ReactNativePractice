@@ -44,8 +44,6 @@ export default function Index() {
         description: entriesForm.description,
       },
     ];
-    setEntries(newEntries);
-    budgetCheck(newEntries);
     setEntriesForm({
       id: count,
       type: "",
@@ -54,6 +52,8 @@ export default function Index() {
       description: "",
     });
     setCount(count + 1);
+    setEntries(newEntries);
+    budgetCheck(newEntries);
   }
 
   function budgetCheck(currentEntries: Entry[]) {
@@ -130,10 +130,10 @@ export default function Index() {
               return (
                 <View style={styles.textBoxContainer}>
                   <Text style={styles.labelText}>Type of entry</Text>
-                  <TextInput 
-                    style={styles.input} 
-                    value={selectedItem?.title || "Select type"} 
-                    editable={false} 
+                  <TextInput
+                    style={styles.input}
+                    value={selectedItem?.title || "Select type"}
+                    editable={false}
                   />
                 </View>
               )
@@ -159,8 +159,12 @@ export default function Index() {
             data={entries}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <View>
-                <Text>{item.name}</Text>
+              <View style={styles.entryContainer}>
+                <View style={styles.entryHeaders}>
+                  <Text style={styles.entryHeadersText}>{item.name}</Text>
+                  <Text style={styles.entryHeadersText}>{item.amount}</Text>
+                </View>
+                {item.description ? <Text>{item.description}</Text> : <></>}
               </View>
             )}
           />
@@ -186,7 +190,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     padding: 10,
   },
-    selectText: {
+  selectText: {
     fontSize: 15,
     padding: 10,
     fontWeight: 500
@@ -197,5 +201,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#EBEBEB',
     borderRadius: 25,
     borderWidth: 1
+  },
+  entryContainer: {
+    width: 300,
+    padding: 15,
+    margin: 10,
+    backgroundColor: '#EBEBEB',
+    borderRadius: 25,
+  },
+  entryHeaders: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 5,
+  },
+  entryHeadersText: {
+    fontWeight: 700,
+    fontSize: 17,
   },
 });
