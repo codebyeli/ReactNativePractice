@@ -69,10 +69,10 @@ export default function Index() {
       .filter((entry) => entry.type === "expense")
       .reduce((sum, entry) => sum + entry.amount, 0);
 
-    setBudget({
-      ...budget,
-      isOverBudget: expenses > budget.amount,
-    });
+    setBudget((prevBudget) => ({
+      ...prevBudget,
+      isOverBudget: expenses > prevBudget.amount,
+    }));
   }
 
   return (
@@ -126,7 +126,7 @@ export default function Index() {
                 { title: "Expense", value: "expense" },
                 { title: "Income", value: "income" },
               ]}
-              onSelect={(text) => setEntriesForm({ ...entriesForm, type: text })}
+              onSelect={(selectedItem) => setEntriesForm({ ...entriesForm, type: selectedItem.value })}
               renderButton={(selectedItem, isOpened) => {
                 return (<View style={styles.textBoxContainer}>
                   <Text style={styles.labelText}>Type of entry</Text>
@@ -167,7 +167,11 @@ export default function Index() {
               <View style={styles.entryContainer}>
                 <View style={styles.entryHeaders}>
                   <Text style={styles.entryHeadersText}>{item.name}</Text>
-                  <Text style={styles.entryHeadersText}>{item.amount}</Text>
+                  {item.type == 'expense' ?
+                    <Text style={[styles.entryHeadersText, { color: 'red' }]}>{item.amount}</Text>
+                    :
+                    <Text style={[styles.entryHeadersText, { color: 'blue' }]}>{item.amount}</Text>
+                  }
                 </View>
                 {item.description ? <Text>{item.description}</Text> : null}
               </View>
