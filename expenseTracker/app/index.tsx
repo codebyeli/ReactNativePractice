@@ -26,6 +26,7 @@ export default function Index() {
   };
 
   const [entries, setEntries] = useState<Entry[]>([]);
+  const [filteredEntries, setFilteredEntries] = useState("all");
   const [budgetInput, setBudgetInput] = useState("");
   const [count, setCount] = useState(0);
   const [entriesForm, setEntriesForm] = useState<Entry>({
@@ -74,6 +75,13 @@ export default function Index() {
       isOverBudget: expenses > prevBudget.amount,
     }));
   }
+
+  const filteredData = entries.filter((entry) => {
+    if (filteredEntries === "all") {
+      return entry.type === 'expense' || entry.type === 'income'
+    }
+    return entry.type === filteredEntries
+  })
 
   return (
     <View style={styles.screen}>
@@ -157,9 +165,33 @@ export default function Index() {
 
             <Button title="Save Entry" onPress={createEntry} />
           </View>
-
+            <SelectDropdown
+              data={[
+                { title: "All", value: "all" },
+                { title: "Expense", value: "expense" },
+                { title: "Income", value: "income" },
+              ]}
+              onSelect={(selectedItem) => setFilteredEntries(selectedItem.value)}
+              renderButton={(selectedItem, isOpened) => {
+                return (<View style={styles.textBoxContainer}>
+                  <Text style={styles.labelText}>Filter</Text>
+                  <TextInput
+                    style={styles.input}
+                    value={selectedItem?.title || "Filter by type"}
+                    editable={false}
+                  />
+                </View>
+                )
+              }}
+              renderItem={(item, index, isSelected) => {
+                return (
+                  <View>
+                    <Text style={styles.selectText}>{item.title}</Text>
+                  </View>);
+              }}
+            />
           <FlatList
-            data={entries}
+            data={filteredData}
             style={styles.list}
             contentContainerStyle={{ paddingBottom: 140 }}
             keyExtractor={(item) => item.id.toString()}
