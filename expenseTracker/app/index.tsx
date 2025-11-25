@@ -83,6 +83,16 @@ export default function Index() {
     return entry.type === filteredEntries
   })
 
+  /*     const entriesSum = entries.filter((entry) => {
+      if (filteredEntries === "all") {
+        return entry.type === 'expense' || entry.type === 'income'
+      }
+      return entry.type === filteredEntries
+    }) */
+
+  const incomeSum = entries.filter((entry) => entry.type === 'income').reduce((sum, entry) => sum + entry.amount, 0);
+  const expensesSum = entries.filter((entry) => entry.type === 'expense').reduce((sum, entry) => sum + entry.amount, 0);
+
   return (
     <View style={styles.screen}>
       {budget.amount === 0 ? (
@@ -165,31 +175,32 @@ export default function Index() {
 
             <Button title="Save Entry" onPress={createEntry} />
           </View>
-            <SelectDropdown
-              data={[
-                { title: "All", value: "all" },
-                { title: "Expense", value: "expense" },
-                { title: "Income", value: "income" },
-              ]}
-              onSelect={(selectedItem) => setFilteredEntries(selectedItem.value)}
-              renderButton={(selectedItem, isOpened) => {
-                return (<View style={styles.textBoxContainer}>
-                  <Text style={styles.labelText}>Filter</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={selectedItem?.title || "Filter by type"}
-                    editable={false}
-                  />
-                </View>
-                )
-              }}
-              renderItem={(item, index, isSelected) => {
-                return (
-                  <View>
-                    <Text style={styles.selectText}>{item.title}</Text>
-                  </View>);
-              }}
-            />
+          {filteredEntries === 'income' ? <Text>Sum: {incomeSum} </Text> : <Text>Sum: {expensesSum}</Text>}
+          <SelectDropdown
+            data={[
+              { title: "All", value: "all" },
+              { title: "Expense", value: "expense" },
+              { title: "Income", value: "income" },
+            ]}
+            onSelect={(selectedItem) => setFilteredEntries(selectedItem.value)}
+            renderButton={(selectedItem, isOpened) => {
+              return (<View style={styles.textBoxContainer}>
+                <Text style={styles.labelText}>Filter</Text>
+                <TextInput
+                  style={styles.input}
+                  value={selectedItem?.title || "Filter by type"}
+                  editable={false}
+                />
+              </View>
+              )
+            }}
+            renderItem={(item, index, isSelected) => {
+              return (
+                <View>
+                  <Text style={styles.selectText}>{item.title}</Text>
+                </View>);
+            }}
+          />
           <FlatList
             data={filteredData}
             style={styles.list}
