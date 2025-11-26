@@ -7,10 +7,11 @@ import {
   FlatList,
   TextInput,
   Pressable,
+  Modal,
 } from "react-native";
 import TextBox from "@/components/textBox";
 import SelectDropdown from "react-native-select-dropdown";
-import { Trash } from 'lucide-react-native';
+import { Trash, Pencil } from 'lucide-react-native';
 
 export default function Index() {
   type Entry = {
@@ -30,6 +31,7 @@ export default function Index() {
   const [filteredEntries, setFilteredEntries] = useState("all");
   const [budgetInput, setBudgetInput] = useState("");
   const [count, setCount] = useState(0);
+  const [editBudgetModal, setEditBudgetModal] = useState(false)
   const [entriesForm, setEntriesForm] = useState<Entry>({
     id: count,
     type: "",
@@ -66,19 +68,22 @@ export default function Index() {
     budgetCheck(newEntries);
   }
 
-  function budgetCheck(currentEntries: Entry[]) {
+  function budgetCheck(currentEntries: Entry[], budgetAmount?: number) {
     const expenses = currentEntries
       .filter((entry) => entry.type === "expense")
       .reduce((sum, entry) => sum + entry.amount, 0);
 
     setBudget((prevBudget) => ({
       ...prevBudget,
-      isOverBudget: expenses > prevBudget.amount,
+      amount: budgetAmount ?? prevBudget.amount,
+      isOverBudget: expenses > (budgetAmount ?? prevBudget.amount),
     }));
   }
 
   function deleteEntry(id: number) {
-    setEntries(entries.filter((entry) => entry.id !== id));
+    const updatedEntries = entries.filter((entry) => entry.id !== id);
+    setEntries(updatedEntries);
+    budgetCheck(updatedEntries);
   }
 
   const filteredData = entries.filter((entry) => {
@@ -93,6 +98,27 @@ export default function Index() {
 
   return (
     <View style={styles.screen}>
+      <Modal
+        animationType="none"
+        transparent={false}
+        visible={editBudgetModal}
+        onRequestClose={() => { setEditBudgetModal(!editBudgetModal) }}
+      >
+        <View style={styles.centerContainer}>
+          <TextBox label="Whats your new monthly budget?" placeholder="Budget" value={budgetInput}
+            onChange={setBudgetInput}
+            keyboardType="numeric"></TextBox>
+          <Button
+            title="Save budget"
+            onPress={() => {
+              const newBudgetAmount = parseInt(budgetInput);
+              setEditBudgetModal(!editBudgetModal);
+              setBudgetInput("");
+              budgetCheck(entries, newBudgetAmount);
+            }}
+          />
+        </View>
+      </Modal>
       {budget.amount === 0 ? (
         <View style={styles.centerContainer}>
           <TextBox
@@ -117,6 +143,7 @@ export default function Index() {
               {budget.isOverBudget && (
                 <Text style={styles.overBudget}>— OVER BUDGET!</Text>
               )}
+              <Pressable style={styles.deleteButton} onPress={() => { setEditBudgetModal(true) }}><Pencil /></Pressable>
             </Text>
 
             <TextBox
