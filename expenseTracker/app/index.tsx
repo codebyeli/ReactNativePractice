@@ -6,10 +6,11 @@ import {
   Button,
   FlatList,
   TextInput,
-  ScrollView,
+  Pressable,
 } from "react-native";
 import TextBox from "@/components/textBox";
 import SelectDropdown from "react-native-select-dropdown";
+import { Trash } from 'lucide-react-native';
 
 export default function Index() {
   type Entry = {
@@ -76,19 +77,16 @@ export default function Index() {
     }));
   }
 
+  function deleteEntry(id: number) {
+    setEntries(entries.filter((entry) => entry.id !== id));
+  }
+
   const filteredData = entries.filter((entry) => {
     if (filteredEntries === "all") {
       return entry.type === 'expense' || entry.type === 'income'
     }
     return entry.type === filteredEntries
   })
-
-  /*     const entriesSum = entries.filter((entry) => {
-      if (filteredEntries === "all") {
-        return entry.type === 'expense' || entry.type === 'income'
-      }
-      return entry.type === filteredEntries
-    }) */
 
   const incomeSum = entries.filter((entry) => entry.type === 'income').reduce((sum, entry) => sum + entry.amount, 0);
   const expensesSum = entries.filter((entry) => entry.type === 'expense').reduce((sum, entry) => sum + entry.amount, 0);
@@ -175,7 +173,8 @@ export default function Index() {
 
             <Button title="Save Entry" onPress={createEntry} />
           </View>
-          {filteredEntries === 'income' ? <Text>Sum: {incomeSum} </Text> : <Text>Sum: {expensesSum}</Text>}
+          {filteredEntries === 'income' ? <Text>Income Sum: {incomeSum} </Text> : <Text>Expenses Sum: {expensesSum}</Text>}
+          <Text>Total (Income - Expenses) ${incomeSum - expensesSum}</Text>
           <SelectDropdown
             data={[
               { title: "All", value: "all" },
@@ -217,6 +216,7 @@ export default function Index() {
                   }
                 </View>
                 {item.description ? <Text>{item.description}</Text> : null}
+                <Pressable style={styles.deleteButton} onPress={() => deleteEntry(item.id)}><Trash color="red" /></Pressable>
               </View>
             )}
           />
@@ -315,4 +315,8 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     padding: 10
   },
+  deleteButton: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
+  }
 });
