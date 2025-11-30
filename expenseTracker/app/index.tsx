@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -12,6 +12,7 @@ import {
 import TextBox from "@/components/textBox";
 import SelectDropdown from "react-native-select-dropdown";
 import { Trash, Pencil } from 'lucide-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Index() {
   type Entry = {
@@ -44,6 +45,30 @@ export default function Index() {
     amount: 0,
     isOverBudget: false,
   });
+
+  useEffect(() => {
+    const loadEntries = async () => {
+      const data = await AsyncStorage.getItem('entries');
+      if (data) setEntries(JSON.parse(data))
+    };
+  loadEntries();
+  }, [])
+
+  useEffect(() => {
+    AsyncStorage.setItem('entries', JSON.stringify(entries));
+  }, [entries])
+
+    useEffect(() => {
+    const loadBudget = async () => {
+      const data = await AsyncStorage.getItem('budget');
+        if (data) setBudget(JSON.parse(data))
+    };
+  loadBudget();
+  }, [])
+
+  useEffect(() => {
+    AsyncStorage.setItem('budget', JSON.stringify(budget));
+  }, [budget])
 
   function createEntry() {
     const newEntries = [
@@ -236,7 +261,7 @@ export default function Index() {
               <View style={styles.entryContainer}>
                 <View style={styles.entryHeaders}>
                   <Text style={styles.entryHeadersText}>{item.name}</Text>
-                  {item.type == 'expense' ?
+                  {item.type === 'expense' ?
                     <Text style={[styles.entryHeadersText, { color: 'red' }]}>{item.amount}</Text>
                     :
                     <Text style={[styles.entryHeadersText, { color: 'blue' }]}>{item.amount}</Text>
