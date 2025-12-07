@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import TextBox from "@/components/textBox";
 import SelectDropdown from "react-native-select-dropdown";
-import { Trash, Pencil } from "lucide-react-native";
+import { Trash, Pencil, Plus } from "lucide-react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Entry, Budget, Category } from "@/constants/types";
 
@@ -52,6 +52,7 @@ export default function Index() {
     amount: 0,
     name: "",
     description: "",
+    category: undefined, // Agregar category al estado inicial
   });
 
   const [budget, setBudget] = useState<Budget>({
@@ -84,21 +85,28 @@ export default function Index() {
   }, [budget]); */
 
   function createEntry() {
+    // Validar que se haya seleccionado una categoría
+    if (!entriesForm.category) {
+      alert("Please select a category");
+      return;
+    }
+
     const newEntries = [
       ...entries,
       {
         id: count,
-        type: entriesForm.type,
+        category: entriesForm.category, // Guardar la categoría completa
         amount: entriesForm.amount,
         name: entriesForm.name,
         description: entriesForm.description,
       },
     ];
     setEntriesForm({
-      id: count,
+      id: count + 1,
       amount: 0,
       name: "",
       description: "",
+      category: undefined,
     });
     setCount(count + 1);
     setEntries(newEntries);
@@ -117,13 +125,15 @@ export default function Index() {
       },
     ];
     setCategoryForm({
-      id: count,
+      id: count + 1,
       budget: 0,
       name: "",
+      type: "expense",
       description: "",
     });
     setCount(count + 1);
     setCategories(newCategories);
+    setCategoryModal(false);
   }
 
   function budgetCheck(currentEntries: Entry[], budgetAmount?: number) {
@@ -157,6 +167,16 @@ export default function Index() {
   const expensesSum = entries
     .filter((entry) => entry.category?.type === "expense")
     .reduce((sum, entry) => sum + entry.amount, 0);
+
+  function getCategorySpending(categoryId: number): { spent: number; remaining: number } {
+    const categoryEntries = entries.filter(
+      (entry) => entry.category?.id === categoryId && entry.category?.type === "expense"
+    );
+    const spent = categoryEntries.reduce((sum, entry) => sum + entry.amount, 0);
+    const categoryBudget = categories.find((cat) => cat.id === categoryId)?.budget || 0;
+    const remaining = categoryBudget - spent;
+    return { spent, remaining };
+  }
 
   return (
     <View style={styles.screen}>
@@ -213,8 +233,8 @@ export default function Index() {
             }
           />
           <TextBox
-            label="Amount"
-            placeholder="Amount"
+            label="Budget"
+            placeholder="Budget"
             value={
               categoryForm.budget === 0 ? "" : categoryForm.budget.toString()
             }
@@ -295,23 +315,27 @@ export default function Index() {
               {budget.isOverBudget && (
                 <Text style={styles.overBudget}>— OVER BUDGET!</Text>
               )}
+            </Text>
+            <View style={styles.buttonRow}>
               <Pressable
-                style={styles.deleteButton}
+                style={styles.iconButton}
                 onPress={() => {
                   setEditBudgetModal(true);
                 }}
               >
-                <Pencil />
+                <Pencil size={20} />
+                <Text style={styles.iconButtonText}>Edit Budget</Text>
               </Pressable>
               <Pressable
-                style={styles.deleteButton}
+                style={styles.iconButton}
                 onPress={() => {
                   setCategoryModal(true);
                 }}
               >
-                <Pencil />
+                <Plus size={20} />
+                <Text style={styles.iconButtonText}>Add Category</Text>
               </Pressable>
-            </Text>
+            </View>
 
             <TextBox
               label="Name"
@@ -338,7 +362,7 @@ export default function Index() {
             <SelectDropdown
               data={categories}
               onSelect={(selectedItem) =>
-                setEntriesForm({ ...entriesForm, type: selectedItem.value })
+                setEntriesForm({ ...entriesForm, category: selectedItem })
               }
               renderButton={(selectedItem, isOpened) => {
                 return (
@@ -416,21 +440,36 @@ export default function Index() {
                   <Text style={styles.entryHeadersText}>{item.name}</Text>
                   {item.category?.type === "expense" ? (
                     <Text style={[styles.entryHeadersText, { color: "red" }]}>
-                      {item.amount}
+                      ${item.amount}
                     </Text>
                   ) : (
                     <Text style={[styles.entryHeadersText, { color: "blue" }]}>
-                      {item.amount}
+                      ${item.amount}
                     </Text>
                   )}
                 </View>
-                <Text>{item.category?.type}</Text>
+                <Text style={styles.categoryText}>
+                  Category: {item.category?.name}
+                </Text>
+                {item.category?.type === "expense" && item.category?.id !== undefined && (
+                  <View style={styles.budgetInfo}>
+                    <Text style={styles.budgetInfoText}>
+                      Spent: ${getCategorySpending(item.category.id).spent} / ${item.category.budget}
+                    </Text>
+                    <Text style={[
+                      styles.budgetInfoText,
+                      getCategorySpending(item.category.id).remaining < 0 
+                        ? { color: "red", fontWeight: "700" }
+                        : { color: "green" }
+                    ]}></Text>
+                  </View>
+                )}
                 {item.description ? <Text>{item.description}</Text> : null}
                 <Pressable
                   style={styles.deleteButton}
                   onPress={() => deleteEntry(item.id)}
                 >
-                  <Trash color="red" />
+                  <Trash color="red" size={20} />
                 </Pressable>
               </View>
             )}
@@ -482,6 +521,25 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    marginBottom: 15,
+  },
+
+  iconButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 8,
+    gap: 5,
+  },
+
+  iconButtonText: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+
   list: {
     flex: 1,
     marginTop: 10,
@@ -504,6 +562,24 @@ const styles = StyleSheet.create({
   entryHeadersText: {
     fontWeight: "700",
     fontSize: 17,
+  },
+
+  categoryText: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 5,
+  },
+
+  budgetInfo: {
+    backgroundColor: "#F9F9F9",
+    padding: 8,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+
+  budgetInfoText: {
+    fontSize: 13,
+    fontWeight: "500",
   },
 
   textBoxContainer: {
@@ -533,5 +609,6 @@ const styles = StyleSheet.create({
   deleteButton: {
     flexDirection: "row",
     justifyContent: "flex-end",
+    marginTop: 5,
   },
 });
