@@ -52,7 +52,7 @@ export default function Index() {
     amount: 0,
     name: "",
     description: "",
-    category: undefined, // Agregar category al estado inicial
+    category: undefined,
   });
 
   const [budget, setBudget] = useState<Budget>({
@@ -60,7 +60,7 @@ export default function Index() {
     isOverBudget: false,
   });
 
-/*   useEffect(() => {
+   useEffect(() => {
     const loadEntries = async () => {
       const data = await AsyncStorage.getItem("entries");
       if (data) setEntries(JSON.parse(data));
@@ -82,10 +82,9 @@ export default function Index() {
 
   useEffect(() => {
     AsyncStorage.setItem("budget", JSON.stringify(budget));
-  }, [budget]); */
+  }, [budget]); 
 
   function createEntry() {
-    // Validar que se haya seleccionado una categoría
     if (!entriesForm.category) {
       alert("Please select a category");
       return;
@@ -95,7 +94,7 @@ export default function Index() {
       ...entries,
       {
         id: count,
-        category: entriesForm.category, // Guardar la categoría completa
+        category: entriesForm.category,
         amount: entriesForm.amount,
         name: entriesForm.name,
         description: entriesForm.description,
