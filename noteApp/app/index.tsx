@@ -1,11 +1,15 @@
 import Header from "@/components/header";
+import ThemedTextBox from "@/components/themedTextBox";
 import { Colors } from "@/constants/Colors";
-import { StyleSheet, Text, useColorScheme, View } from "react-native";
+import { useForm } from "react-hook-form";
+import { StyleSheet, Button, Text, useColorScheme, View } from "react-native";
 
 const colorScheme = useColorScheme() ?? 'light'
 const theme = Colors[colorScheme]
 
 export default function Index() {
+
+  const {control, handleSubmit} = useForm()
 
 type Note = {
   id: number
