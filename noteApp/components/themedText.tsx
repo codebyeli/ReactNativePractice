@@ -11,6 +11,8 @@ const ThemedText = ({ style, type, scheme, ...props }: any) => {
         scheme === 'title' ? styles.title : undefined,
         scheme === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
         scheme === 'subtitle' ? styles.subtitle : undefined,
+        scheme === 'header' ? styles.header : undefined,
+        scheme === 'subheader' ? styles.subheader : undefined,
             style]}
             {...props}
         />
@@ -19,12 +21,20 @@ const ThemedText = ({ style, type, scheme, ...props }: any) => {
 export default ThemedText
 
 const styles = StyleSheet.create({
-        title: {
+    title: {
         fontSize: 32,
         fontWeight: 'bold',
         lineHeight: 32,
     },
-        subtitle: {
+    header: {
+        fontSize: 28,
+        fontWeight: 'bold',
+    },
+    subheader: {
+        fontSize: 22,
+        lineHeight: 24,
+    },
+    subtitle: {
         fontSize: 20,
         fontWeight: 'bold',
     },
