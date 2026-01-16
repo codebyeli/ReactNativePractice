@@ -3,7 +3,7 @@ import Header from "@/components/header";
 import { Colors } from "@/constants/Colors";
 import { StyleSheet, useColorScheme, View, Pressable, FlatList } from "react-native";
 import { useRouter } from 'expo-router'
-import { Trash, Pencil, Check } from "lucide-react-native";
+import { Trash, Pencil } from "lucide-react-native";
 import { useNote } from "@/context/NoteContext";
 import ThemedText from "@/components/themedText";
 import { Checkbox } from 'expo-checkbox';

@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useContext, useEffect, useState } from "react"
 import { Note } from '@/constants/notes.interface'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type NoteContextType = {
     notes: Note[]
@@ -13,6 +14,18 @@ const NoteContext = createContext<NoteContextType | null>(null)
 
 export function NoteProvider({ children }: { children: React.ReactNode }) {
     const [notes, setNotes] = useState<Note[]>([])
+
+   useEffect(() => {
+    const loadNotes = async () => {
+      const data = await AsyncStorage.getItem("notes");
+      if (data) setNotes(JSON.parse(data));
+    };
+    loadNotes();
+  }, []);
+
+  useEffect(() => {
+    AsyncStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
     const addNote = (data: Note) => {
         setNotes((prev) => [...prev, data])
