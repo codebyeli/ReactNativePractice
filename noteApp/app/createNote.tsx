@@ -1,6 +1,6 @@
 import { StyleSheet, useColorScheme, View } from 'react-native'
 import React from 'react'
-import { v4 as uuid } from "uuid"
+import * as Crypto from 'expo-crypto';
 import ThemedTextBox from '@/components/themedTextBox'
 import Header from '@/components/header'
 import { Colors } from '@/constants/Colors'
@@ -20,7 +20,7 @@ const createNote = () => {
 
   const onSubmit = (data: any) => {
     addNote({
-      id: uuid(),
+      id: Crypto.randomUUID(),
       title: data.title,
       content: data.content,
       isCompleted: false,
@@ -32,7 +32,7 @@ const createNote = () => {
     <View style={[styles.root, { backgroundColor: theme.background }]}>
       <Header />
       <ThemedTextBox control={control} name='title' title='Title' placeholder='Note title' />
-      <ThemedTextBox control={control} name='content' title='Description' placeholder='Note description' />
+      <ThemedTextBox control={control} name='content' title='Description' placeholder='Note description' multiline={true} />
       <ThemedButton buttonText='Save Note' onPress={handleSubmit(onSubmit)} ></ThemedButton>
     </View>
   )

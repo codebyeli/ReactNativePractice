@@ -57,13 +57,13 @@ export default function Index() {
                   style={styles.deleteButton}
                   onPress={() => handleEditNote(item.id) }
                 >
-                  <Pencil color="white" size={40} />
+                  <Pencil color={theme.uitext} size={40} />
                 </Pressable>
                 <Pressable
                   style={styles.deleteButton}
                   onPress={() => deleteNote(item.id)}
                 >
-                  <Trash color="white" size={40} />
+                  <Trash color={theme.uitext} size={40} />
                 </Pressable>
               </View>
             </View>

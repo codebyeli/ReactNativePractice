@@ -12,6 +12,7 @@ const ThemedTextBox = ({
     placeholder,
     isError,
     secureTextEntry,
+    multiline, 
     ...props
 }: any) => {
 
@@ -31,8 +32,11 @@ const ThemedTextBox = ({
                         value={value}
                         onChangeText={onChange}
                         onBlur={onBlur}
-                        style={[styles.input, { backgroundColor: theme.uibackground }]}
+                        style={[styles.input, { backgroundColor: theme.background }]}
                         secureTextEntry={secureTextEntry}
+                        multiline={multiline}
+                        numberOfLines={multiline ? 10 : 1}
+                        maxLength={90}
                     />
                 </View>
             )}
