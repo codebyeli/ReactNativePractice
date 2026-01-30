@@ -36,7 +36,7 @@ const ThemedTextBox = ({
                         secureTextEntry={secureTextEntry}
                         multiline={multiline}
                         numberOfLines={multiline ? 10 : 1}
-                        maxLength={90}
+                        maxLength={120}
                     />
                 </View>
             )}
