@@ -80,10 +80,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   noteContainer: {
-    width: "98%",
+    width: "96%",
     padding: 15,
     marginVertical: 6,
-    marginHorizontal: 10,
+    marginHorizontal: 25,
     borderRadius: 15,
     flexDirection: "row",
     alignItems: "center",
