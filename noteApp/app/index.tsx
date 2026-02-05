@@ -51,7 +51,7 @@ export default function Index() {
         contentContainerStyle={{ paddingBottom: 140 }}
         keyExtractor={(item: any) => item.id.toString()}
         renderItem={({ item }: any) => (
-          <View style={[styles.noteContainer, { backgroundColor: theme.foreground }]}>
+          <View style={ item.isCompleted === true ? [styles.noteContainer, { backgroundColor: theme.uibackground }] : [styles.noteContainer, { backgroundColor: theme.foreground,  }] }>
             <View style={styles.checkWrapper}>
               <Checkbox
                 value={item.isCompleted}
@@ -61,9 +61,9 @@ export default function Index() {
             </View>
             <View style={styles.noteBody}>
               <View style={styles.noteHeaders}>
-                <ThemedText scheme='header' type='ui'>{item.title}</ThemedText>
+                <ThemedText scheme='header' type='ui' style={ item.isCompleted === true ? {textDecorationLine: 'line-through'} : {}}>{item.title}</ThemedText>
               </View>
-              <ThemedText scheme='subheader' type='ui'>{item.content}</ThemedText>
+              <ThemedText scheme='subheader' type='ui' style={ item.isCompleted === true ? {textDecorationLine: 'line-through'} : {}}>{item.content}</ThemedText>
               <View style={styles.buttonContainer}>
                 <Pressable
                   style={styles.deleteButton}
