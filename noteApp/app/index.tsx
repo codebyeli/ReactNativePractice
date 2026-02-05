@@ -107,11 +107,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   noteContainer: {
-    width: "96%",
+    width: "87%",
     padding: 15,
     marginVertical: 6,
-    marginHorizontal: 25,
     borderRadius: 15,
+    marginHorizontal: 25,
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
   checkWrapper: {
     width: 34,
     height: 34,
-
     alignItems: "center",
     justifyContent: "center",
   },
