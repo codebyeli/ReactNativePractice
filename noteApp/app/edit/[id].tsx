@@ -42,6 +42,7 @@ const EditNote = () => {
             name="content"
             title="Description"
             placeholder="Note description"
+            multiline={true}
           />
           <ThemedButton
             buttonText="Update Note"
