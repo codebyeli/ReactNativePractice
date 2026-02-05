@@ -32,7 +32,10 @@ const ThemedTextBox = ({
                         value={value}
                         onChangeText={onChange}
                         onBlur={onBlur}
-                        style={[styles.input, { backgroundColor: theme.background }]}
+                        style={[styles.input, { backgroundColor: theme.background,
+                            color: theme.text,
+                            borderColor: theme.text
+                         }]}
                         secureTextEntry={secureTextEntry}
                         multiline={multiline}
                         numberOfLines={multiline ? 10 : 1}
@@ -59,6 +62,7 @@ const styles = StyleSheet.create({
     },
     title: {
         paddingLeft: 7,
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        marginBottom: 10
     }
 })
