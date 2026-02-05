@@ -1,12 +1,14 @@
 import AddButton from "@/components/addButton";
 import Header from "@/components/header";
 import { Colors } from "@/constants/Colors";
-import { StyleSheet, useColorScheme, View, Pressable, FlatList } from "react-native";
+import { StyleSheet, useColorScheme, View, Pressable, FlatList, Modal, Button } from "react-native";
 import { useRouter } from 'expo-router'
 import { Trash, Pencil } from "lucide-react-native";
 import { useNote } from "@/context/NoteContext";
 import ThemedText from "@/components/themedText";
 import { Checkbox } from 'expo-checkbox';
+import { useState } from "react";
+import ThemedModal from "@/components/themedModal";
 
 
 export default function Index() {
@@ -15,19 +17,29 @@ export default function Index() {
   const theme = Colors[colorScheme]
   const router = useRouter()
   const { notes, deleteNote, updateNote } = useNote()
+  const [confirmationModal, setConfirmationModal] = useState(false)
+  const [noteToDelete, setNoteToDelete] = useState<string | null>(null)
+
+  const handleNoteDeletion = () => {
+    if (!noteToDelete) return
+
+    deleteNote(noteToDelete)
+    setNoteToDelete(null)
+    setConfirmationModal(false)
+  }
 
   const handleAddNote = () => {
     router.push('/createNote')
   }
 
-    const handleEditNote = (id:string) => {
+  const handleEditNote = (id: string) => {
     router.push(`/edit/${id}`)
   }
 
-    function toggleCompleteOnTask(id: string, data: any) {
+  function toggleCompleteOnTask(id: string, data: any) {
     updateNote(id, {
       isCompleted: !data.isCompleted,
-    })  
+    })
   }
 
   return (
@@ -41,8 +53,8 @@ export default function Index() {
         renderItem={({ item }: any) => (
           <View style={[styles.noteContainer, { backgroundColor: theme.foreground }]}>
             <View style={styles.checkWrapper}>
-              <Checkbox 
-                value={item.isCompleted} 
+              <Checkbox
+                value={item.isCompleted}
                 onValueChange={() => toggleCompleteOnTask(item.id, item)}
                 color={item.isCompleted ? theme.background : '#ccc'}
               />
@@ -53,24 +65,39 @@ export default function Index() {
               </View>
               <ThemedText scheme='subheader' type='ui'>{item.content}</ThemedText>
               <View style={styles.buttonContainer}>
-                <Pressable 
+                <Pressable
                   style={styles.deleteButton}
-                  onPress={() => handleEditNote(item.id) }
+                  onPress={() => handleEditNote(item.id)}
                 >
                   <Pencil color={theme.uitext} size={40} />
                 </Pressable>
                 <Pressable
                   style={styles.deleteButton}
-                  onPress={() => deleteNote(item.id)}
+                  onPress={() => {
+                    setNoteToDelete(item.id)
+                    setConfirmationModal(true)
+                  }}
                 >
                   <Trash color={theme.uitext} size={40} />
                 </Pressable>
+
               </View>
             </View>
           </View>
         )}
       />
       <AddButton onPress={handleAddNote} />
+      <ThemedModal
+        visible={confirmationModal}
+        title="Delete item?"
+        description="This action cannot be undone."
+        onConfirm={handleNoteDeletion}
+        onCancel={() => {
+          setNoteToDelete(null)
+          setConfirmationModal(false)
+        }}
+      />
+
     </View>
   );
 }
@@ -116,7 +143,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
 
   },
-    buttonContainer: {
+  buttonContainer: {
     flexDirection: "row",
     alignSelf: "flex-end",
   },
