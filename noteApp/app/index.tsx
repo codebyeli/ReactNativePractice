@@ -3,7 +3,7 @@ import Header from "@/components/header";
 import { Colors } from "@/constants/Colors";
 import { StyleSheet, useColorScheme, View, Pressable, FlatList, Modal, Button } from "react-native";
 import { useRouter } from 'expo-router'
-import { Trash, Pencil } from "lucide-react-native";
+import { Trash, Pencil, Eye } from "lucide-react-native";
 import { useNote } from "@/context/NoteContext";
 import ThemedText from "@/components/themedText";
 import { Checkbox } from 'expo-checkbox';
@@ -36,6 +36,11 @@ export default function Index() {
     router.push(`/edit/${id}`)
   }
 
+    const handleViewNote = (id: string) => {
+    router.push(`/view/${id}`)
+  }
+
+
   function toggleCompleteOnTask(id: string, data: any) {
     updateNote(id, {
       isCompleted: !data.isCompleted,
@@ -67,9 +72,9 @@ export default function Index() {
               <View style={styles.buttonContainer}>
                 <Pressable
                   style={styles.deleteButton}
-                  onPress={() => handleEditNote(item.id)}
+                  onPress={() => handleViewNote(item.id)}
                 >
-                  <Pencil color={theme.uitext} size={40} />
+                  <Eye color={theme.uitext} size={40} />
                 </Pressable>
                 <Pressable
                   style={styles.deleteButton}
@@ -80,7 +85,12 @@ export default function Index() {
                 >
                   <Trash color={theme.uitext} size={40} />
                 </Pressable>
-
+                <Pressable
+                  style={styles.deleteButton}
+                  onPress={() => handleEditNote(item.id)}
+                >
+                  <Pencil color={theme.uitext} size={40} />
+                </Pressable>
               </View>
             </View>
           </View>
