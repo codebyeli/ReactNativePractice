@@ -64,18 +64,12 @@ export default function Index() {
                 color={item.isCompleted ? theme.background : '#ccc'}
               />
             </View>
-            <View style={styles.noteBody}>
+            <Pressable onPress={() => handleViewNote(item.id)} style={styles.noteBody}>
               <View style={styles.noteHeaders}>
                 <ThemedText scheme='header' type='ui' style={ item.isCompleted === true ? {textDecorationLine: 'line-through'} : {}}>{item.title}</ThemedText>
               </View>
               <ThemedText scheme='subheader' type='ui' style={ item.isCompleted === true ? {textDecorationLine: 'line-through'} : {}}>{item.content}</ThemedText>
               <View style={styles.buttonContainer}>
-                <Pressable
-                  style={styles.deleteButton}
-                  onPress={() => handleViewNote(item.id)}
-                >
-                  <Eye color={theme.uitext} size={40} />
-                </Pressable>
                 <Pressable
                   style={styles.deleteButton}
                   onPress={() => {
@@ -92,7 +86,7 @@ export default function Index() {
                   <Pencil color={theme.uitext} size={40} />
                 </Pressable>
               </View>
-            </View>
+            </Pressable>
           </View>
         )}
       />

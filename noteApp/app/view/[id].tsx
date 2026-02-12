@@ -22,7 +22,11 @@ const ViewNote = () => {
           <Header />
           <View style={styles.textBoxContainer}>
           <ThemedText scheme="header" style={styles.header}>{notes.title}</ThemedText>
-          <ThemedText scheme="default">{notes.content}</ThemedText>
+          <ThemedText scheme="default"style={styles.content}>{notes.content}</ThemedText>
+          <ThemedButton
+            buttonText="Go back"
+            onPress={() => router.back()}
+          ></ThemedButton>{" "}
           </View>
         </View>
       ) : (
@@ -51,6 +55,9 @@ const styles = StyleSheet.create({
   },
     header: {
     paddingBottom: 25
+  },
+      content: {
+    paddingBottom: 35
   },
   noteNotFound: {
     justifyContent: "center",
